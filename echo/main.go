@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strconv"
 	"time"
 
 	"net/http"
@@ -10,7 +11,6 @@ import (
 	"github.com/labstack/echo/middleware"
 	"github.com/rs/zerolog"
 	log "github.com/rs/zerolog/log"
-	// "github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -22,22 +22,34 @@ func init() {
 
 var port = os.Getenv("PORT")
 
+type Data struct {
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+}
+
 func main() {
 
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Static("/static", "static/")
 	e.GET("/", func(c echo.Context) error {
-		// log.Info().Str("path", "/").Str("method", "GET").Send()
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	e.POST("/", func(c echo.Context) error {
-		// log.Info().Str("path", "/").Str("method", "POST").Send()
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	e.GET("/test", func(c echo.Context) error {
-		// log.Info().Str("path", "/test").Str("method", "GET").Send()
 		return c.String(http.StatusOK, "test ok")
+	})
+	e.GET("/name/:name", func(c echo.Context) error {
+		name := c.Param("name")
+		age := c.QueryParam("age")
+		if age == "" {
+			age = "0"
+		}
+		ageint, _ := strconv.Atoi(age)
+		jsonData := Data{Name: name, Age: ageint}
+		return c.JSON(http.StatusOK, jsonData)
 	})
 	if port == "" {
 		port = "8080"
