@@ -19,9 +19,8 @@ func init() {
 	zerolog.TimeFieldFormat = time.RFC3339Nano
 }
 
-var port = os.Getenv("PORT")
-
 func main() {
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		var method = r.Method
 		switch method {
@@ -34,10 +33,11 @@ func main() {
 		}
 	})
 
+	var port = os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		log.Error().Err(err)
+		log.Fatal().Err(err)
 	}
 }
