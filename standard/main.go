@@ -26,11 +26,11 @@ func main() {
 		var method = r.Method
 		switch method {
 		case "GET":
-			io.WriteString(w, "Hello, World!!")
+			io.WriteString(w, "Hello, World for GET!!")
 		case "POST":
 			io.WriteString(w, "Hello, World!! for POST")
 		default:
-			io.WriteString(w, fmt.Sprintf("unsupported method: %s", r.Method))
+			io.WriteString(w, fmt.Sprintf("Unsupported method: %s", r.Method))
 		}
 	})
 
